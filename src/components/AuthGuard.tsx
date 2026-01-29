@@ -26,10 +26,12 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
     }, []);
 
     const handleLogin = async () => {
-        const bp = process.env.NEXT_PUBLIC_BASE_PATH || "";
-        // Supabase is strict about trailing slashes. 
-        // We ensure it matches exactly what should be in the "Redirect URLs" list.
-        const redirectTo = `${window.location.origin}${bp}`;
+        // Dynamically get the current URL without query params or hash
+        // This ensures it works for both Firebase and GitHub Pages subpaths automatically
+        const redirectTo = window.location.href.split('?')[0].split('#')[0];
+
+        // Ensure this exact URL matches your Supabase "Redirect URLs" list
+        // e.g., https://bhooleop-droid.github.io/X_EXPL/
 
         await supabase.auth.signInWithOAuth({
             provider: "discord",
