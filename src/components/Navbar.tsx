@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Terminal, Menu, X } from "lucide-react";
+import { Terminal, Menu, X, LogOut } from "lucide-react";
+import { supabase } from "@/lib/supabase";
 
 const NAV_LINKS = [
     { name: "Home", href: "#home" },
@@ -21,6 +22,11 @@ export default function Navbar() {
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
+
+    const handleLogout = async () => {
+        await supabase.auth.signOut();
+        window.location.reload();
+    };
 
     return (
         <nav
@@ -47,12 +53,13 @@ export default function Navbar() {
                             {link.name}
                         </a>
                     ))}
-                    <a
-                        href="#scripts"
-                        className="px-6 py-2 bg-accent-blue/20 border border-accent-blue/50 rounded-full text-xs font-hacker uppercase tracking-widest hover:bg-accent-blue hover:text-white transition-all duration-300 shadow-[0_0_15px_rgba(59,130,246,0.2)]"
+                    <button
+                        onClick={handleLogout}
+                        className="flex items-center gap-2 px-6 py-2 bg-white/5 border border-white/10 rounded-full text-[10px] font-hacker uppercase tracking-widest hover:bg-red-500/20 hover:border-red-500/50 hover:text-red-500 transition-all duration-300"
                     >
-                        Get Started
-                    </a>
+                        <LogOut className="w-3 h-3" />
+                        Log Out
+                    </button>
                 </div>
 
                 {/* Mobile Toggle */}
@@ -83,6 +90,13 @@ export default function Navbar() {
                                 {link.name}
                             </a>
                         ))}
+                        <button
+                            onClick={handleLogout}
+                            className="flex items-center gap-3 py-4 text-red-500 font-hacker uppercase tracking-[0.2em] text-sm"
+                        >
+                            <LogOut className="w-4 h-4" />
+                            Sign Out
+                        </button>
                     </motion.div>
                 )}
             </AnimatePresence>

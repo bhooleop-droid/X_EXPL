@@ -18,6 +18,8 @@ export const metadata: Metadata = {
   description: "Experience the next level of script discovery with cinematic scrollytelling.",
 };
 
+import AuthGuard from "@/components/AuthGuard";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -28,7 +30,9 @@ export default function RootLayout({
       <body
         className={`${orbitron.variable} ${inter.variable} font-sans bg-black text-white antialiased overflow-x-hidden`}
       >
-        {children}
+        <AuthGuard>
+          {children}
+        </AuthGuard>
       </body>
     </html>
   );
