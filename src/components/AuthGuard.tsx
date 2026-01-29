@@ -27,7 +27,9 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
 
     const handleLogin = async () => {
         const bp = process.env.NEXT_PUBLIC_BASE_PATH || "";
-        const redirectTo = `${window.location.origin}${bp}/`;
+        // Supabase is strict about trailing slashes. 
+        // We ensure it matches exactly what should be in the "Redirect URLs" list.
+        const redirectTo = `${window.location.origin}${bp}`;
 
         await supabase.auth.signInWithOAuth({
             provider: "discord",
