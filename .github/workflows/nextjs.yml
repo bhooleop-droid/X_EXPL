@@ -62,6 +62,8 @@ jobs:
         run: ${{ steps.detect-package-manager.outputs.runner }} next build
         env:
           NEXT_PUBLIC_BASE_PATH: /X_EXPL
+          NEXT_PUBLIC_SUPABASE_URL: https://vaaedaypxsxhyhxqomli.supabase.co
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: sb_publishable_Ow5lZV5-faRWLdrBtrCCqg_Fwl-i3bS
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
