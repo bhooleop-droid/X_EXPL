@@ -26,10 +26,13 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
     }, []);
 
     const handleLogin = async () => {
+        const bp = process.env.NEXT_PUBLIC_BASE_PATH || "";
+        const redirectTo = `${window.location.origin}${bp}/`;
+
         await supabase.auth.signInWithOAuth({
             provider: "discord",
             options: {
-                redirectTo: window.location.origin,
+                redirectTo: redirectTo,
             },
         });
     };
