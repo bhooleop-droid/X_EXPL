@@ -43,7 +43,12 @@ export default function CanvasScroll({
             const img = new Image();
             // Assuming 4-digit padded names like 0001.jpg
             const frameNum = i.toString().padStart(4, "0");
-            img.src = `${folderPath}${frameNum}.jpg`;
+            // Handle basePath for GitHub Pages production deployments
+            const isProd = process.env.NODE_ENV === 'production';
+            const bp = isProd ? '/X_EXPL' : '';
+            const finalFolderPath = folderPath.startsWith('/') ? `${bp}${folderPath}` : folderPath;
+
+            img.src = `${finalFolderPath}${frameNum}.jpg`;
             img.onload = () => {
                 loadedCount++;
                 if (loadedCount === frameCount) {
