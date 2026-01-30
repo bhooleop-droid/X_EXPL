@@ -28,6 +28,15 @@ export default function UploadScriptModal({ isOpen, onClose }: UploadScriptModal
             const { data: { user } } = await supabase.auth.getUser();
             if (!user) throw new Error("Not authenticated");
 
+            // Ensure user exists in public.users to satisfy FK constraint
+            await supabase.from('users').upsert({
+                id: user.id,
+                discord_id: user.user_metadata.provider_id,
+                username: user.user_metadata.full_name || user.user_metadata.name || user.email,
+                avatar_url: user.user_metadata.avatar_url,
+                email: user.email
+            }, { onConflict: 'id' });
+
             const { error } = await supabase.from("scripts").insert({
                 user_id: user.id,
                 title,
