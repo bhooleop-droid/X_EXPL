@@ -11,9 +11,12 @@ const NAV_LINKS = [
     { name: "Executors", href: "#executors" },
 ];
 
+import UploadScriptModal from "./UploadScriptModal";
+
 export default function Navbar() {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -29,77 +32,102 @@ export default function Navbar() {
     };
 
     return (
-        <nav
-            className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${isScrolled ? "py-4 bg-black/60 backdrop-blur-xl border-b border-white/10" : "py-8 bg-transparent"
-                }`}
-        >
-            <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-                {/* Logo */}
-                <a href="#home" className="flex items-center gap-3">
-                    <Terminal className="w-8 h-8 text-accent-blue" />
-                    <span className="font-hacker text-xl font-bold tracking-tighter text-glow-blue">
-                        X_ExpoilT_HuB
-                    </span>
-                </a>
+        <>
+            <nav
+                className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${isScrolled ? "py-4 bg-black/60 backdrop-blur-xl border-b border-white/10" : "py-8 bg-transparent"
+                    }`}
+            >
+                <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
+                    {/* Logo */}
+                    <a href="#home" className="flex items-center gap-3">
+                        <Terminal className="w-8 h-8 text-accent-blue" />
+                        <span className="font-hacker text-xl font-bold tracking-tighter text-glow-blue">
+                            X_ExpoilT_HuB
+                        </span>
+                    </a>
 
-                {/* Desktop Links */}
-                <div className="hidden md:flex items-center gap-10">
-                    {NAV_LINKS.map((link) => (
-                        <a
-                            key={link.name}
-                            href={link.href}
-                            className="text-sm font-hacker uppercase tracking-widest text-white/70 hover:text-accent-blue hover:text-glow-blue transition-all duration-200"
-                        >
-                            {link.name}
-                        </a>
-                    ))}
-                    <button
-                        onClick={handleLogout}
-                        className="flex items-center gap-2 px-6 py-2 bg-white/5 border border-white/10 rounded-full text-[10px] font-hacker uppercase tracking-widest hover:bg-red-500/20 hover:border-red-500/50 hover:text-red-500 transition-all duration-300"
-                    >
-                        <LogOut className="w-3 h-3" />
-                        Log Out
-                    </button>
-                </div>
-
-                {/* Mobile Toggle */}
-                <button
-                    className="md:hidden text-white p-2"
-                    onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                >
-                    {isMobileMenuOpen ? <X /> : <Menu />}
-                </button>
-            </div>
-
-            {/* Mobile Menu */}
-            <AnimatePresence>
-                {isMobileMenuOpen && (
-                    <motion.div
-                        initial={{ opacity: 0, y: -20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -20 }}
-                        className="absolute top-full left-0 w-full bg-black/95 backdrop-blur-2xl border-b border-white/10 flex flex-col items-center py-10 gap-8 z-40"
-                    >
+                    {/* Desktop Links */}
+                    <div className="hidden md:flex items-center gap-10">
                         {NAV_LINKS.map((link) => (
                             <a
                                 key={link.name}
                                 href={link.href}
-                                className="text-xl font-hacker uppercase tracking-widest text-white"
-                                onClick={() => setIsMobileMenuOpen(false)}
+                                className="text-sm font-hacker uppercase tracking-widest text-white/70 hover:text-accent-blue hover:text-glow-blue transition-all duration-200"
                             >
                                 {link.name}
                             </a>
                         ))}
+
+                        <button
+                            onClick={() => setIsUploadModalOpen(true)}
+                            className="text-sm font-hacker uppercase tracking-widest text-accent-cyan hover:text-white transition-all duration-200"
+                        >
+                            + Upload
+                        </button>
+
+                        <div className="h-6 w-[1px] bg-white/10 mx-2" />
+
                         <button
                             onClick={handleLogout}
-                            className="flex items-center gap-3 py-4 text-red-500 font-hacker uppercase tracking-[0.2em] text-sm"
+                            className="flex items-center gap-2 px-6 py-2 bg-white/5 border border-white/10 rounded-full text-[10px] font-hacker uppercase tracking-widest hover:bg-red-500/20 hover:border-red-500/50 hover:text-red-500 transition-all duration-300"
                         >
-                            <LogOut className="w-4 h-4" />
-                            Sign Out
+                            <LogOut className="w-3 h-3" />
+                            Log Out
                         </button>
-                    </motion.div>
-                )}
-            </AnimatePresence>
-        </nav>
+                    </div>
+
+                    {/* Mobile Toggle */}
+                    <button
+                        className="md:hidden text-white p-2"
+                        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                    >
+                        {isMobileMenuOpen ? <X /> : <Menu />}
+                    </button>
+                </div>
+
+                {/* Mobile Menu */}
+                <AnimatePresence>
+                    {isMobileMenuOpen && (
+                        <motion.div
+                            initial={{ opacity: 0, y: -20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -20 }}
+                            className="absolute top-full left-0 w-full bg-black/95 backdrop-blur-2xl border-b border-white/10 flex flex-col items-center py-10 gap-8 z-40"
+                        >
+                            {NAV_LINKS.map((link) => (
+                                <a
+                                    key={link.name}
+                                    href={link.href}
+                                    className="text-xl font-hacker uppercase tracking-widest text-white"
+                                    onClick={() => setIsMobileMenuOpen(false)}
+                                >
+                                    {link.name}
+                                </a>
+                            ))}
+
+                            <button
+                                onClick={() => {
+                                    setIsMobileMenuOpen(false);
+                                    setIsUploadModalOpen(true);
+                                }}
+                                className="text-xl font-hacker uppercase tracking-widest text-accent-cyan"
+                            >
+                                + Upload Script
+                            </button>
+
+                            <button
+                                onClick={handleLogout}
+                                className="flex items-center gap-3 py-4 text-red-500 font-hacker uppercase tracking-[0.2em] text-sm"
+                            >
+                                <LogOut className="w-4 h-4" />
+                                Sign Out
+                            </button>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </nav>
+
+            <UploadScriptModal isOpen={isUploadModalOpen} onClose={() => setIsUploadModalOpen(false)} />
+        </>
     );
 }
