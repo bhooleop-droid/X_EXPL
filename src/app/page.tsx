@@ -2,6 +2,7 @@
 
 import Navbar from "@/components/Navbar";
 import ScrollytellingSection from "@/components/ScrollytellingSection";
+import ScriptLibrary from "@/components/ScriptLibrary";
 import { ScriptCard, ExecutorCard } from "@/components/Cards";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import { motion } from "framer-motion";
@@ -112,30 +113,7 @@ export default function Home() {
         subtitle="The largest repository of verified scripts for your favorite games."
         accentColor="blue"
       >
-        <div className="space-y-16">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 border-b border-white/5 pb-12">
-            <div className="space-y-4">
-              <h2 className="text-3xl md:text-4xl font-bold">Verified Scripts</h2>
-              <p className="text-white/50">Manually checked for safety and performance.</p>
-            </div>
-            <div className="flex gap-4">
-              <div className="px-4 py-2 bg-white/5 rounded-lg border border-white/10 text-[10px] font-hacker uppercase">Search: Ctrl+F</div>
-              <div className="px-4 py-2 bg-white/5 rounded-lg border border-white/10 text-[10px] font-hacker uppercase">Total: 432+</div>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {SCRIPTS.map((script) => (
-              <ScriptCard key={script.name} {...script} />
-            ))}
-          </div>
-
-          <div className="pt-8 text-center">
-            <button className="text-xs font-hacker uppercase tracking-widest text-white/40 hover:text-accent-blue transition-colors">
-              + Load 24 More Scripts
-            </button>
-          </div>
-        </div>
+        <ScriptLibrary />
       </ScrollytellingSection>
 
       {/* Executors Section */}
