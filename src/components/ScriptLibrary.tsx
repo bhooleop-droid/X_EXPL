@@ -9,7 +9,7 @@ interface Script {
     id: string;
     title: string;
     game_name: string;
-    code_content: string;
+    script_code: string;
     created_at: string;
     user_id: string;
 }

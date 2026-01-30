@@ -32,7 +32,7 @@ export default function UploadScriptModal({ isOpen, onClose }: UploadScriptModal
                 user_id: user.id,
                 title,
                 game_name: gameName,
-                code_content: scriptCode,
+                script_code: scriptCode,
             });
 
             if (error) throw error;
