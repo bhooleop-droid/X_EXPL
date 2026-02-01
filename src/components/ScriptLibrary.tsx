@@ -12,6 +12,12 @@ interface Script {
     script_code: string;
     created_at: string;
     user_id: string;
+    views_count?: number;
+    tags?: string[];
+    users?: {
+        username: string;
+        avatar_url: string;
+    };
 }
 
 export default function ScriptLibrary() {
@@ -25,8 +31,17 @@ export default function ScriptLibrary() {
         // Subscribe to realtime changes
         const channel = supabase
             .channel('public:scripts')
-            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'scripts' }, (payload) => {
-                setScripts((current) => [payload.new as Script, ...current]);
+            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'scripts' }, async (payload) => {
+                // Fetch the full joined data for the new script
+                const { data, error } = await supabase
+                    .from('scripts')
+                    .select('*, users(username, avatar_url)')
+                    .eq('id', payload.new.id)
+                    .single();
+
+                if (data && !error) {
+                    setScripts((current) => [data as Script, ...current]);
+                }
             })
             .subscribe();
 
@@ -39,7 +54,7 @@ export default function ScriptLibrary() {
         try {
             const { data, error } = await supabase
                 .from('scripts')
-                .select('*')
+                .select('*, users(username, avatar_url)')
                 .order('created_at', { ascending: false });
 
             if (error) throw error;
@@ -95,8 +110,11 @@ export default function ScriptLibrary() {
                             key={script.id}
                             name={script.title}
                             game={script.game_name}
-                            description="Verified user upload." // We could add a description field later
-                            sourceLink="#" // We will need to decide how to handle the 'Link' or 'Code' view
+                            description={script.users ? `Uploaded by ${script.users.username}` : "Verified user upload."}
+                            sourceLink="#" // We will implement detail view later
+                            author={script.users}
+                            views={script.views_count}
+                            tags={script.tags}
                         />
                     ))}
                 </div>

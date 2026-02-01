@@ -14,6 +14,7 @@ export default function UploadScriptModal({ isOpen, onClose }: UploadScriptModal
     const [title, setTitle] = useState("");
     const [gameName, setGameName] = useState("");
     const [scriptCode, setScriptCode] = useState("");
+    const [tagsInput, setTagsInput] = useState("");
     const [loading, setLoading] = useState(false);
     const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
     const [message, setMessage] = useState("");
@@ -42,11 +43,14 @@ export default function UploadScriptModal({ isOpen, onClose }: UploadScriptModal
                 throw new Error(`Profile Sync Failed: ${userError.message}`);
             }
 
+            const tagsArray = tagsInput.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0);
+
             const { error } = await supabase.from("scripts").insert({
                 user_id: user.id,
                 title,
                 game_name: gameName,
                 script_code: scriptCode,
+                tags: tagsArray,
             });
 
             if (error) throw error;
@@ -57,6 +61,7 @@ export default function UploadScriptModal({ isOpen, onClose }: UploadScriptModal
                 onClose();
                 setStatus("idle");
                 setMessage("");
+                setTagsInput("");
                 setTitle("");
                 setGameName("");
                 setScriptCode("");
@@ -120,6 +125,19 @@ export default function UploadScriptModal({ isOpen, onClose }: UploadScriptModal
                                     placeholder="e.g. Blox Fruits Auto Farm"
                                     required
                                     className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-white/20 focus:outline-none focus:border-accent-blue/50 focus:bg-white/10 transition-all"
+                                />
+                            </div>
+
+                            <div className="space-y-2">
+                                <label className="flex items-center gap-2 text-xs font-hacker text-white/60 uppercase tracking-widest">
+                                    <Type className="w-3 h-3" /> Tags (comma separated)
+                                </label>
+                                <input
+                                    type="text"
+                                    value={tagsInput}
+                                    onChange={(e) => setTagsInput(e.target.value)}
+                                    placeholder="e.g. PVP, Farming, Auto"
+                                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-white/20 focus:outline-none focus:border-accent-blue/50 focus:bg-white/10 transition-all font-mono text-sm"
                                 />
                             </div>
 
