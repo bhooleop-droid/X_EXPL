@@ -20,10 +20,13 @@ interface Script {
     };
 }
 
+import ScriptDetailModal from "@/components/ScriptDetailModal";
+
 export default function ScriptLibrary() {
     const [scripts, setScripts] = useState<Script[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState("");
+    const [selectedScriptId, setSelectedScriptId] = useState<string | null>(null);
 
     useEffect(() => {
         fetchScripts();
@@ -111,14 +114,21 @@ export default function ScriptLibrary() {
                             name={script.title}
                             game={script.game_name}
                             description={script.users ? `Uploaded by ${script.users.username}` : "Verified user upload."}
-                            sourceLink="#" // We will implement detail view later
+                            sourceLink="#"
                             author={script.users}
                             views={script.views_count}
                             tags={script.tags}
+                            onClick={() => setSelectedScriptId(script.id)}
                         />
                     ))}
                 </div>
             )}
+
+            <ScriptDetailModal
+                isOpen={!!selectedScriptId}
+                onClose={() => setSelectedScriptId(null)}
+                scriptId={selectedScriptId || ""}
+            />
         </div>
     );
 }

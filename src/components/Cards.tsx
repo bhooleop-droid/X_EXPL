@@ -14,14 +14,16 @@ interface ScriptCardProps {
     };
     views?: number;
     tags?: string[];
+    onClick?: () => void;
 }
 
-export function ScriptCard({ name, game, description, sourceLink, author, views = 0, tags = [] }: ScriptCardProps) {
+export function ScriptCard({ name, game, description, sourceLink, author, views = 0, tags = [], onClick }: ScriptCardProps) {
     return (
         <motion.div
+            onClick={onClick}
             whileHover={{ scale: 1.02, y: -5 }}
             whileTap={{ scale: 0.98 }}
-            className="glass-panel p-6 rounded-2xl flex flex-col gap-4 group transition-all duration-300 hover:border-accent-blue/50 h-full"
+            className="glass-panel p-6 rounded-2xl flex flex-col gap-4 group transition-all duration-300 hover:border-accent-blue/50 h-full cursor-pointer"
         >
             <div className="flex items-start justify-between">
                 <div className="flex flex-col gap-1">
@@ -64,14 +66,11 @@ export function ScriptCard({ name, game, description, sourceLink, author, views 
                     {/* Placeholder for likes until implemented in parent */}
                     {/* <span className="flex items-center gap-1">❤️ 0</span> */}
                 </div>
-                <a
-                    href={sourceLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 px-4 py-2 rounded-lg bg-accent-blue/10 border border-accent-blue/20 text-xs font-hacker uppercase tracking-widest hover:bg-accent-blue hover:text-white transition-all duration-300"
+                <div
+                    className="flex items-center gap-2 px-4 py-2 rounded-lg bg-accent-blue/10 border border-accent-blue/20 text-xs font-hacker uppercase tracking-widest group-hover:bg-accent-blue group-hover:text-white transition-all duration-300"
                 >
-                    View <ExternalLink className="w-3 h-3" />
-                </a>
+                    View Script
+                </div>
             </div>
         </motion.div>
     );
