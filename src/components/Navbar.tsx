@@ -17,12 +17,21 @@ export default function Navbar() {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
+    const [user, setUser] = useState<any>(null);
 
     useEffect(() => {
         const handleScroll = () => {
             setIsScrolled(window.scrollY > 50);
         };
         window.addEventListener("scroll", handleScroll);
+
+        // Fetch user
+        const getUser = async () => {
+            const { data: { user } } = await supabase.auth.getUser();
+            setUser(user);
+        };
+        getUser();
+
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
@@ -64,6 +73,15 @@ export default function Navbar() {
                         >
                             + Upload
                         </button>
+
+                        {user && (
+                            <a
+                                href={`/profile?user_id=${user.id}`}
+                                className="text-sm font-hacker uppercase tracking-widest text-white/70 hover:text-accent-purple transition-all duration-200"
+                            >
+                                My Profile
+                            </a>
+                        )}
 
                         <div className="h-6 w-[1px] bg-white/10 mx-2" />
 
@@ -114,6 +132,16 @@ export default function Navbar() {
                             >
                                 + Upload Script
                             </button>
+
+                            {user && (
+                                <a
+                                    href={`/profile?user_id=${user.id}`}
+                                    className="text-xl font-hacker uppercase tracking-widest text-accent-purple"
+                                    onClick={() => setIsMobileMenuOpen(false)}
+                                >
+                                    My Profile
+                                </a>
+                            )}
 
                             <button
                                 onClick={handleLogout}
